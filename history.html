@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan History - PhishLens</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .history-hero {
+            text-align: center;
+            padding: 40px 15px 25px;
+        }
+
+        .history-hero h1 {
+            color: #42184c;
+            font-size: 34px;
+        }
+
+        .history-hero p {
+            color: #806b82;
+            font-size: 17px;
+        }
+
+        .history-card {
+            max-width: 850px;
+            margin: 25px auto;
+            padding: 25px;
+            background: white;
+            border: 1px solid #efcde8;
+            border-radius: 24px;
+        }
+
+        .history-item {
+            padding: 20px;
+            border-bottom: 1px solid #f1ddeb;
+            overflow-wrap: anywhere;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item h3 {
+            color: #b92c94;
+            margin: 0 0 8px;
+        }
+
+        .history-item p {
+            margin: 5px 0;
+            color: #604b65;
+        }
+
+        .clear-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(110deg, #d52eaa, #a849ed);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #806b82;
+            padding: 25px 0;
+        }
+
+        @media (max-width: 600px) {
+            .history-card {
+                margin: 20px 15px;
+                padding: 18px;
+            }
+
+            .history-hero h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">🛡️ PhishLens</div>
+    <div>🔐 Security First</div>
+</header>
+
+<nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="url-analyzer.html">URL Analyzer</a>
+    <a href="message-analyzer.html">Message Analyzer</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="history.html">History</a>
+    <a href="safety.html">Safety Tips</a>
+    <a href="login.html"
+       onclick="sessionStorage.removeItem('phishlensLoggedIn')">
+       Logout
+    </a>
+</nav>
+
+<main>
+    <section class="history-hero">
+        <h1>🕒 Scan History</h1>
+        <p>Review your recent security scans</p>
+    </section>
+
+    <section class="history-card">
+        <div id="historyList" class="empty-message">
+            Loading history...
+        </div>
+
+        <button class="clear-btn" onclick="clearHistory()">
+            🗑️ Clear Scan History
+        </button>
+    </section>
+</main>
+
+<script>
+    function getHistory() {
+        try {
+            const data = localStorage.getItem("phishingHistory");
+            const history = data ? JSON.parse(data) : [];
+            return Array.isArray(history) ? history : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function displayHistory() {
+        const list = document.getElementById("historyList");
+        const history = getHistory();
+
+        list.replaceChildren();
+
+        if (history.length === 0) {
+            list.className = "empty-message";
+            list.textContent = "No scan history available yet.";
+            return;
+        }
+
+        list.className = "";
+
+        history.forEach(function(scan, index) {
+            const item = document.createElement("div");
+            item.className = "history-item";
+
+            const heading = document.createElement("h3");
+            heading.textContent = "Scan #" + (index + 1);
+
+            const input = document.createElement("p");
+            input.textContent =
+                "Input: " +
+                (scan.url || scan.message || scan.input ||
+                 scan.text || scan.type || "Security Scan");
+
+            const result = document.createElement("p");
+            result.textContent =
+                "Result: " +
+                (scan.risk || scan.level || scan.result ||
+                 scan.status || "Recorded scan");
+
+            item.appendChild(heading);
+            item.appendChild(input);
+            item.appendChild(result);
+
+            list.appendChild(item);
+        });
+    }
+
+    function clearHistory() {
+        if (!confirm("Are you sure you want to clear all scan history?")) {
+            return;
+        }
+
+        localStorage.removeItem("phishingHistory");
+        displayHistory();
+    }
+
+    displayHistory();
+</script>
+
+</body>
+</html>

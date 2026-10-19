@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Analyzer - PhishLens</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .message-hero {
+            text-align: center;
+            padding: 55px 20px 30px;
+        }
+
+        .message-hero h1 {
+            font-size: 38px;
+            color: #35143f;
+        }
+
+        .message-hero p {
+            font-size: 18px;
+            color: #806b82;
+        }
+
+        .analyzer-card {
+            max-width: 600px;
+            margin: 35px auto;
+            padding: 30px;
+            background: white;
+            border: 1px solid #efcde8;
+            border-radius: 28px;
+            text-align: center;
+            box-shadow: 0 10px 35px #d9a6d533;
+        }
+
+        .main-btn, .action-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(110deg, #d52eaa, #a849ed);
+            color: white;
+            margin-top: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #35143f66;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid #efcde8;
+            border-radius: 28px;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .modal-box h2 {
+            text-align: center;
+            color: #cc329f;
+            font-size: 27px;
+        }
+
+        .modal-box p {
+            color: #806b82;
+            font-size: 17px;
+        }
+
+        #messageInput {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 180px;
+            padding: 15px;
+            border: 2px solid #e1afd4;
+            border-radius: 18px;
+            background: #fff3fa;
+            font-size: 17px;
+            resize: vertical;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 17px;
+            margin-top: 12px;
+            border: 1px solid #e4bfd9;
+            border-radius: 18px;
+            background: #fce7f3;
+            color: #8d285f;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .result-box {
+            text-align: center;
+        }
+
+        .result-box h2 {
+            color: #cc329f;
+        }
+
+        #resultDetails {
+            text-align: left;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 600px) {
+            .message-hero h1 {
+                font-size: 30px;
+            }
+
+            .analyzer-card {
+                margin: 25px 15px;
+                padding: 22px;
+            }
+
+            .modal-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">🛡️ PhishLens</div>
+    <div>🔐 Security First</div>
+</header>
+
+<nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="url-analyzer.html">URL Analyzer</a>
+    <a href="message-analyzer.html">Message Analyzer</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="history.html">History</a>
+    <a href="safety.html">Safety Tips</a>
+    <a href="login.html"
+       onclick="sessionStorage.removeItem('phishlensLoggedIn')">
+       Logout
+    </a>
+</nav>
+
+<main>
+    <section class="message-hero">
+        <h1>📩 Message Analyzer</h1>
+        <p>Check suspicious messages for possible<br>
+           phishing signs.</p>
+    </section>
+
+    <section class="analyzer-card">
+        <button class="main-btn" onclick="openMessageModal()">
+            🔎 Analyze Message
+        </button>
+    </section>
+</main>
+
+<!-- MESSAGE INPUT POPUP -->
+<div class="modal" id="messageModal">
+    <div class="modal-box">
+        <h2>📩 Analyze Message</h2>
+        <p>Paste a suspicious message below:</p>
+
+        <textarea id="messageInput"
+            placeholder="Example: Your account has been selected for a reward. Click here to claim..."></textarea>
+
+        <button class="action-btn" onclick="analyzeMessage()">
+            🔎 Analyze Message
+        </button>
+
+        <button class="cancel-btn" onclick="closeMessageModal()">
+            ❌ Cancel
+        </button>
+    </div>
+</div>
+
+<!-- RESULT POPUP -->
+<div class="modal" id="resultModal">
+    <div class="modal-box result-box">
+        <h2 id="resultTitle">Analysis Result</h2>
+        <div id="resultDetails"></div>
+
+        <button class="action-btn" onclick="closeResultModal()">
+            OK
+        </button>
+    </div>
+</div>
+
+<script>
+    function openMessageModal() {
+        document.getElementById("messageInput").value = "";
+        document.getElementById("messageModal").style.display = "flex";
+    }
+
+    function closeMessageModal() {
+        document.getElementById("messageModal").style.display = "none";
+    }
+
+    function closeResultModal() {
+        document.getElementById("resultModal").style.display = "none";
+    }
+
+    function analyzeMessage() {
+        const message = document.getElementById("messageInput")
+            .value.trim();
+
+        if (!message) {
+            alert("Please enter a message to analyze.");
+            return;
+        }
+
+        let score = 0;
+        let reasons = [];
+
+        const rules = [
+            {
+                pattern: /urgent|immediately|act now|limited time/i,
+                points: 20,
+                reason: "Urgent or pressuring language"
+            },
+            {
+                pattern: /password|otp|pin|cvv|bank details/i,
+                points: 25,
+                reason: "Requests sensitive information"
+            },
+            {
+                pattern: /click here|verify now|login now|claim now/i,
+                points: 20,
+                reason: "Encourages clicking or verification"
+            },
+            {
+                pattern: /suspended|blocked|locked|account problem/i,
+                points: 20,
+                reason: "Threatens an account problem"
+            },
+            {
+                pattern: /prize|reward|winner|free gift|lottery/i,
+                points: 20,
+                reason: "Unexpected prize or reward"
+            },
+            {
+                pattern: /http:\/\/|https:\/\//i,
+                points: 15,
+                reason: "Contains a link"
+            }
+        ];
+
+        rules.forEach(function(rule) {
+            if (rule.pattern.test(message)) {
+                score += rule.points;
+                reasons.push(rule.reason);
+            }
+        });
+
+        score = Math.min(score, 100);
+
+        let level;
+        let title;
+
+        if (score >= 60) {
+            level = "HIGH RISK";
+            title = "⚠️ Potential Phishing Message";
+        } else if (score >= 30) {
+            level = "MEDIUM RISK";
+            title = "⚠️ Suspicious Message";
+        } else {
+            level = "LOW RISK";
+            title = "✅ Lower Risk Message";
+        }
+
+        if (reasons.length === 0) {
+            reasons.push("No common warning keywords were detected.");
+        }
+      let total = Number(localStorage.getItem("totalScanCount")) || 0;
+total++;
+localStorage.setItem("totalScanCount", total);
+let history = JSON.parse(localStorage.getItem("phishingHistory")) || [];
+
+history.unshift({
+    type: "MESSAGE",
+    target: message,
+    score: score,
+    level: level,
+    time: new Date().toLocaleString()
+});
+
+if (history.length > 10) {
+    history = history.slice(0, 10);
+}
+
+localStorage.setItem("phishingHistory", JSON.stringify(history));
+        document.getElementById("resultTitle").textContent = title;
+
+        const details = document.getElementById("resultDetails");
+        details.replaceChildren();
+
+        const scoreLine = document.createElement("p");
+        scoreLine.textContent = "Risk Score: " + score + "/100";
+        details.appendChild(scoreLine);
+
+        const levelLine = document.createElement("p");
+        levelLine.textContent = "Risk Level: " + level;
+        details.appendChild(levelLine);
+
+        const heading = document.createElement("p");
+        heading.textContent = "Warning signs:";
+        details.appendChild(heading);
+
+        const list = document.createElement("ul");
+
+        reasons.forEach(function(reason) {
+            const item = document.createElement("li");
+            item.textContent = reason;
+            list.appendChild(item);
+        });
+
+        details.appendChild(list);
+
+        const advice = document.createElement("p");
+        advice.textContent =
+            "Safety tip: Do not click suspicious links or share passwords, OTPs, or banking details. This is a basic rule-based check, not a guarantee.";
+        details.appendChild(advice);
+
+      
+      
+        closeMessageModal();
+        document.getElementById("resultModal").style.display = "flex";
+    }
+
+    window.addEventListener("click", function(event) {
+        if (event.target === document.getElementById("messageModal")) {
+            closeMessageModal();
+        }
+
+        if (event.target === document.getElementById("resultModal")) {
+            closeResultModal();
+        }
+    });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".navbar a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            document.querySelectorAll(".modal").forEach(function (modal) {
+                modal.style.display = "none";
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>

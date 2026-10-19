@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PhishLens</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .dashboard-hero {
+            text-align: center;
+            padding: 40px 15px 25px;
+        }
+
+        .dashboard-hero h1 {
+            color: #42184c;
+            font-size: 34px;
+        }
+
+        .dashboard-hero p {
+            color: #806b82;
+            font-size: 17px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #efcde8;
+            border-radius: 22px;
+            padding: 24px 12px;
+            text-align: center;
+            box-shadow: 0 8px 24px #d9a6d522;
+        }
+
+        .stat-card h2 {
+            font-size: 34px;
+            margin: 8px 0;
+            color: #c832a0;
+        }
+
+        .stat-card p {
+            color: #806b82;
+            margin: 0;
+        }
+
+        .recent-card {
+            max-width: 818px;
+            margin: 25px auto;
+            padding: 24px;
+            background: white;
+            border: 1px solid #efcde8;
+            border-radius: 22px;
+        }
+
+        .recent-card h2 {
+            color: #42184c;
+        }
+
+        .scan-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #f1ddeb;
+            overflow-wrap: anywhere;
+        }
+
+        .scan-item:last-child {
+            border-bottom: none;
+        }
+
+        .empty-message {
+            color: #806b82;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-hero h1 {
+                font-size: 29px;
+            }
+
+            .recent-card {
+                margin: 20px 16px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">🛡️ PhishLens</div>
+    <div>🔐 Security First</div>
+</header>
+
+<nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="url-analyzer.html">URL Analyzer</a>
+    <a href="message-analyzer.html">Message Analyzer</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="./history.html">History</a>
+    <a href="safety.html">Safety Tips</a>
+    <a href="login.html"
+       onclick="sessionStorage.removeItem('phishlensLoggedIn')">
+       Logout
+    </a>
+</nav>
+
+<main>
+    <section class="dashboard-hero">
+        <h1>📊 Security Dashboard</h1>
+        <p>Your PhishLens scan overview</p>
+    </section>
+
+    <section class="stats-grid">
+        <div class="stat-card">
+            <p>🔍 Total Scans</p>
+            <h2 id="totalScans">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>✅ Low Risk</p>
+            <h2 id="safeScans">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>⚠️ Medium Risk</p>
+            <h2 id="mediumScans">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>🚨 High Risk</p>
+            <h2 id="highScans">0</h2>
+        </div>
+    </section>
+
+    <section class="recent-card">
+        <h2>🕒 Recent Activity</h2>
+        <div id="recentActivity" class="empty-message">
+            Loading scan history...
+        </div>
+    </section>
+</main>
+
+<script>
+    function loadDashboard() {
+        let history = [];
+
+        try {
+            const saved = localStorage.getItem("phishingHistory");
+            history = saved ? JSON.parse(saved) : [];
+
+            if (!Array.isArray(history)) {
+                history = [];
+            }
+        } catch (error) {
+            history = [];
+        }
+
+        let low = 0;
+        let medium = 0;
+        let high = 0;
+
+        history.forEach(function(scan) {
+            const text = (
+                (scan.risk || "") + " " +
+                (scan.level || "") + " " +
+                (scan.result || "") + " " +
+                (scan.status || "")
+            ).toLowerCase();
+
+            const score = Number(
+                scan.score ?? scan.riskScore ?? -1
+            );
+
+            if (
+                text.includes("high") ||
+                text.includes("phishing") ||
+                (score >= 60 && score <= 100)
+            ) {
+                high++;
+            } else if (
+                text.includes("medium") ||
+                text.includes("suspicious") ||
+                (score >= 30 && score < 60)
+            ) {
+                medium++;
+            } else if (
+                text.includes("low") ||
+                text.includes("safe") ||
+                (score >= 0 && score < 30)
+            ) {
+                low++;
+            }
+        });
+
+        document.getElementById("totalScans").textContent =
+            history.length;
+        document.getElementById("safeScans").textContent = low;
+        document.getElementById("mediumScans").textContent = medium;
+        document.getElementById("highScans").textContent = high;
+
+        const recent = document.getElementById("recentActivity");
+        recent.replaceChildren();
+
+        if (history.length === 0) {
+            recent.textContent = "No scans yet. Analyze a URL or message to get started.";
+            recent.className = "empty-message";
+            return;
+        }
+
+        recent.className = "";
+
+        history.slice(-5).reverse().forEach(function(scan) {
+            const item = document.createElement("div");
+            item.className = "scan-item";
+
+            const name = document.createElement("strong");
+            name.textContent =
+                scan.url || scan.message || scan.input ||
+                scan.text || scan.type || "Security Scan";
+
+            const details = document.createElement("div");
+            details.textContent =
+                "Result: " +
+                (scan.risk || scan.level || scan.result ||
+                 scan.status || "Recorded scan");
+
+            item.appendChild(name);
+            item.appendChild(details);
+            recent.appendChild(item);
+        });
+    }
+
+    loadDashboard();
+</script>
+
+</body>
+</html>

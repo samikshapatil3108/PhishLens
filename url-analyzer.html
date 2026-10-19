@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Analyzer - PhishLens</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <div class="logo">
+                🛡️ Phish<span>Lens</span>
+            </div>
+
+            <div>
+                🔐 Security First
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="url-analyzer.html">URL Analyzer</a>
+            <a href="message-analyzer.html">Message Analyzer</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="history.html">History</a>
+            <a href="safety.html">Safety Tips</a>
+            <a href="login.html" onclick="sessionStorage.removeItem('phishlensLoggedIn')">Logout</a>
+        </nav>
+
+        <section class="hero">
+            <h1>🔗 URL Analyzer</h1>
+            <p>Check a suspicious URL and find out its phishing risk.</p>
+        </section>
+
+        <section class="card">
+            <h2>Analyze a URL</h2>
+
+            
+
+            <button class="btn primary" onclick="runURLScan()">
+                🔗 Analyze URL
+            </button>
+        </section>
+
+        <div id="urlResult"></div>
+
+    </div>
+
+    <!-- Scanning Overlay -->
+    <div id="scanOverlay" class="scan-overlay" style="display:none;">
+        <div>
+            <h2>🔍 Scanning URL...</h2>
+            <p id="scanProgress">0%</p>
+        </div>
+    </>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

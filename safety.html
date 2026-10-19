@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Tips - PhishLens</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .safety-hero {
+            text-align: center;
+            padding: 40px 15px 25px;
+        }
+
+        .safety-hero h1 {
+            color: #42184c;
+            font-size: 34px;
+        }
+
+        .safety-hero p {
+            color: #806b82;
+            font-size: 17px;
+        }
+
+        .tips-container {
+            max-width: 850px;
+            margin: 20px auto 40px;
+            padding: 0 16px;
+        }
+
+        .tip-card {
+            background: white;
+            border: 1px solid #efcde8;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 20px #d9a6d51c;
+        }
+
+        .tip-card h2 {
+            color: #bd2c98;
+            font-size: 21px;
+            margin-top: 0;
+        }
+
+        .tip-card p {
+            color: #604b65;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .safety-note {
+            background: #fce7f3;
+            border: 1px solid #e9b8d9;
+            border-radius: 18px;
+            padding: 20px;
+            color: #642552;
+            line-height: 1.7;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .safety-hero h1 {
+                font-size: 29px;
+            }
+
+            .tip-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">🛡️ PhishLens</div>
+    <div>🔐 Security First</div>
+</header>
+
+<nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="url-analyzer.html">URL Analyzer</a>
+    <a href="message-analyzer.html">Message Analyzer</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="history.html">History</a>
+    <a href="safety.html">Safety Tips</a>
+    <a href="login.html"
+       onclick="sessionStorage.removeItem('phishlensLoggedIn')">
+       Logout
+    </a>
+</nav>
+
+<main>
+    <section class="safety-hero">
+        <h1>🛡️ Cyber Safety Tips</h1>
+        <p>Stay alert. Stay secure. Stay protected.</p>
+    </section>
+
+    <section class="tips-container">
+
+        <div class="tip-card">
+            <h2>🔗 1. Check Links Before Clicking</h2>
+            <p>Carefully check the website address before opening a link. Watch for misspellings and unfamiliar domains.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>🔐 2. Never Share OTPs or Passwords</h2>
+            <p>Never share your OTP, password, PIN or CVV with anyone through calls, messages or suspicious websites.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>🎁 3. Be Careful With Unexpected Rewards</h2>
+            <p>Messages promising prizes, gifts or lottery winnings may be scams. Verify such offers through official sources.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>⚠️ 4. Don't Panic Over Urgent Messages</h2>
+            <p>Scammers may threaten to block or suspend your account. Open the official app or website to verify the claim.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>🌐 5. Use Official Websites</h2>
+            <p>Type the official website address yourself or use its verified app instead of trusting unknown links.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>📩 6. Verify the Sender</h2>
+            <p>Check the sender's email address or phone number. A familiar display name does not guarantee the message is genuine.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>📲 7. Keep Devices Updated</h2>
+            <p>Install security updates and download apps only from trusted sources. Use a screen lock on your device.</p>
+        </div>
+
+        <div class="tip-card">
+            <h2>🚨 8. Report Suspicious Messages</h2>
+            <p>Don't forward suspicious messages. Report them through the relevant platform or official cybercrime reporting channel.</p>
+        </div>
+
+        <div class="safety-note">
+            <strong>💡 Remember:</strong> If a message seems suspicious, pause and verify it through an official source before taking action. PhishLens provides a basic warning, not a guarantee that a message or URL is safe.
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishLens | Think Before You Click</title>
+
+    <script>
+        if (sessionStorage.getItem("phishlensLoggedIn") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #39164b;
+            background: linear-gradient(135deg, #fff4fa, #f8eaff);
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 24px;
+        }
+
+        /* HEADER AND NAVIGATION */
+
+        .site-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0d9ed;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 27px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            font-size: 34px;
+        }
+
+        .brand span {
+            color: #d52da9;
+        }
+
+        .security-label {
+            color: #754d80;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 15px 0 20px;
+        }
+
+        .navbar a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 11px 14px;
+            border-radius: 25px;
+            color: #592b70;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+        }
+
+        .navbar a:hover,
+        .navbar a.active {
+            color: white;
+            background: linear-gradient(110deg, #d52eaa, #a849ed);
+            box-shadow: 0 5px 15px #d52eaa30;
+        }
+
+        /* HERO */
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 3% 65px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 10px 17px;
+            border: 1px solid #e9a7df;
+            border-radius: 25px;
+            color: #c42c9b;
+            background: #ffebf8;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            margin: 24px 0 12px;
+            font-size: clamp(38px, 5vw, 65px);
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+        }
+
+        .gradient-text {
+            color: #d52eaa;
+        }
+
+        .tagline {
+            margin: 12px 0 25px;
+            color: #603a78;
+            font-size: clamp(23px, 3vw, 34px);
+            font-style: italic;
+        }
+
+        .hero-description {
+            max-width: 580px;
+            color: #74627d;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 16px 24px;
+            border: 0;
+            border-radius: 17px;
+            color: white;
+            background: linear-gradient(110deg, #d52eaa, #a849ed);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 9px 20px #d52eaa30;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* CYBERSECURITY ILLUSTRATION */
+
+        .hero-art {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .hero-art svg {
+            display: block;
+            width: 100%;
+            max-width: 510px;
+            height: auto;
+        }
+
+        /* ABOUT PROJECT */
+
+        .about-section {
+            display: grid;
+            grid-template-columns: 0.8fr 1.5fr;
+            align-items: center;
+            gap: 35px;
+            padding: 35px;
+            margin-bottom: 65px;
+            background: #ffffffd9;
+            border: 1px solid #f1d8ed;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px #b75ab00b;
+        }
+
+        .about-art {
+            text-align: center;
+        }
+
+        .about-art svg {
+            width: 100%;
+            max-width: 290px;
+            height: auto;
+        }
+
+        .section-title {
+            margin: 17px 0;
+            font-size: 32px;
+        }
+
+        .section-description {
+            color: #74627d;
+            font-size: 17px;
+            line-height: 1.85;
+        }
+
+        /* FEATURES */
+
+        .features-section {
+            padding: 0 2% 65px;
+        }
+
+        .features-heading {
+            margin: 17px 0 25px;
+            font-size: 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        .feature-card {
+            padding: 25px 17px;
+            text-align: center;
+            background: #ffffffdb;
+            border: 1px solid #f1d8ed;
+            border-radius: 23px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px #c65cb51a;
+        }
+
+        .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 17px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, #e83cb2, #a849ed);
+            font-size: 29px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .feature-card p {
+            color: #74627d;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* WHY PHISHLENS */
+
+        .why-section {
+            display: grid;
+            grid-template-columns: 0.8fr 1.5fr;
+            align-items: center;
+            gap: 30px;
+            padding: 32px;
+            margin-bottom: 55px;
+            border: 1px solid #efd4f0;
+            border-radius: 30px;
+            background: linear-gradient(115deg, #fbe2fa, #f4e6ff);
+        }
+
+        .why-art {
+            text-align: center;
+        }
+
+        .why-art svg {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+
+        .why-section h2 {
+            margin: 17px 0 10px;
+            font-size: 30px;
+        }
+
+        .why-section p {
+            color: #684f76;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .benefit {
+            text-align: center;
+            color: #634477;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .benefit-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 43px;
+            height: 43px;
+            margin: 0 auto 9px;
+            border-radius: 50%;
+            background: #f4c9f0;
+            font-size: 21px;
+        }
+
+        /* FOOTER */
+
+        .site-footer {
+            padding: 30px 15px;
+            margin: 0 -24px;
+            text-align: center;
+            color: #62327c;
+            background: linear-gradient(110deg, #f0d4ff, #fce0f6, #eac6ff);
+        }
+
+        .site-footer p {
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+
+        .footer-tagline {
+            font-size: 20px;
+            font-style: italic;
+            font-weight: 700;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .site-header {
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 35px 2% 50px;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-art {
+                max-width: 480px;
+                margin: auto;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .about-section,
+            .why-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-art {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .site-header {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .brand {
+                font-size: 25px;
+            }
+
+            .security-label {
+                font-size: 12px;
+            }
+
+            .navbar {
+                gap: 6px;
+                padding: 12px 0 18px;
+            }
+
+            .navbar a {
+                padding: 9px 11px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding-top: 30px;
+                gap: 20px;
+            }
+
+            .hero h1 {
+                font-size: 39px;
+            }
+
+            .tagline {
+                font-size: 25px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                padding: 16px;
+            }
+
+            .about-section {
+                padding: 22px;
+                gap: 15px;
+                margin-bottom: 45px;
+            }
+
+            .section-title,
+            .why-section h2 {
+                font-size: 27px;
+            }
+
+            .section-description {
+                font-size: 15px;
+            }
+
+            .features-section {
+                padding-bottom: 45px;
+            }
+
+            .features-heading {
+                font-size: 26px;
+            }
+
+            .features-grid {
+                gap: 12px;
+            }
+
+            .feature-card {
+                padding: 20px 12px;
+            }
+
+            .feature-card h3 {
+                font-size: 16px;
+            }
+
+            .feature-card p {
+                font-size: 13px;
+            }
+
+            .why-section {
+                padding: 22px 16px;
+                margin-bottom: 35px;
+            }
+
+            .benefits {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            .site-footer {
+                margin: 0 -15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="brand">
+            <span class="brand-icon">🛡️</span>
+            <div>Phish<span>Lens</span></div>
+        </div>
+        <div class="security-label">🔐 Security First</div>
+    </header>
+
+    <!-- STYLED NAVIGATION -->
+    <nav class="navbar">
+        <a href="index.html" class="active">⌂ Home</a>
+        <a href="url-analyzer.html">↗ URL Analyzer</a>
+        <a href="message-analyzer.html">✉ Message Analyzer</a>
+        <a href="dashboard.html">▥ Dashboard</a>
+        <a href="history.html">◷ History</a>
+        <a href="safety.html">⬡ Safety Tips</a>
+        <a href="login.html"
+           onclick="sessionStorage.removeItem('phishlensLoggedIn')">
+           ⇥ Logout
+        </a>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div class="hero-content">
+            <div class="badge">🛡️ Cybersecurity Awareness</div>
+
+            <h1>
+                Think Before<br>
+                You <span class="gradient-text">Click.</span>
+            </h1>
+
+            <div class="tagline">Stay Alert. Stay Secure.</div>
+
+            <p class="hero-description">
+                PhishLens helps you identify suspicious URLs and messages,
+                recognize common phishing warning signs, and build safer
+                online habits.
+            </p>
+
+            <div class="hero-buttons">
+                <button class="action-btn" onclick="runURLScan()">
+                    🔗 Analyze URL
+                </button>
+
+                <button class="action-btn" onclick="runMessageScan()">
+                    ✉ Analyze Message
+                </button>
+            </div>
+        </div>
+
+        <!-- CUSTOM CYBERSECURITY ILLUSTRATION -->
+        <div class="hero-art">
+            <svg viewBox="0 0 520 430" role="img"
+                 aria-label="Cybersecurity illustration showing a laptop, shield, suspicious email and magnifying glass">
+                <defs>
+                    <linearGradient id="screenGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#d85bdf"/>
+                        <stop offset="100%" stop-color="#7545d9"/>
+                    </linearGradient>
+                    <linearGradient id="shieldGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#f15dc5"/>
+                        <stop offset="100%" stop-color="#8d42e6"/>
+                    </linearGradient>
+                </defs>
+
+                <ellipse cx="260" cy="355" rx="220" ry="36" fill="#e8c9f8"/>
+                <circle cx="260" cy="205" r="165" fill="#f4dafa"/>
+                <circle cx="390" cy="125" r="68" fill="#e6c9ff"/>
+                <circle cx="110" cy="265" r="65" fill="#f8d8ef"/>
+
+                <!-- laptop -->
+                <rect x="100" y="140" width="300" height="200" rx="17"
+                      fill="#42216b"/>
+                <rect x="112" y="152" width="276" height="174" rx="10"
+                      fill="url(#screenGradient)"/>
+
+                <!-- screen decoration -->
+                <circle cx="135" cy="168" r="4" fill="#ffb4df"/>
+                <circle cx="149" cy="168" r="4" fill="#f7d4ff"/>
+                <circle cx="163" cy="168" r="4" fill="#ffb4df"/>
+
+                <!-- shield -->
+                <path d="M250 185 L310 207 L303 267
+                         Q290 293 250 310 Q210 293 197 267
+                         L190 207 Z"
+                      fill="url(#shieldGradient)"
+                      stroke="#f5dcff" stroke-width="5"/>
+
+                <path d="M250 201 L294 217 L288 262
+                         Q279 281 250 294 Q221 281 212 262
+                         L206 217 Z"
+                      fill="#fff1ff" opacity=".95"/>
+
+                <!-- lock -->
+                <rect x="233" y="240" width="34" height="28" rx="6"
+                      fill="#7545d9"/>
+                <path d="M240 240 V230 A10 10 0 0 1 260 230 V240"
+                      fill="none" stroke="#7545d9" stroke-width="7"/>
+                <circle cx="250" cy="251" r="4" fill="white"/>
+                <path d="M250 254 V260" stroke="white" stroke-width="3"/>
+
+                <!-- laptop base -->
+                <path d="M80 340 H420 L452 365
+                         Q454 373 439 373 H61
+                         Q46 373 49 365 Z"
+                      fill="#b58ae8"/>
+                <path d="M195 347 H305 L315 359 H185 Z"
+                      fill="#e9d7fb"/>
+
+                <!-- suspicious email -->
+                <g transform="translate(24 66) rotate(-8)">
+                    <rect x="0" y="0" width="112" height="76" rx="12"
+                          fill="#ffffff" stroke="#eaa8d8" stroke-width="4"/>
+                    <path d="M5 9 L56 49 L107 9"
+                          fill="none" stroke="#db68c6" stroke-width="6"/>
+                    <path d="M5 68 L38 38 M107 68 L74 38"
+                          fill="none" stroke="#f1a4db" stroke-width="4"/>
+                    <circle cx="92" cy="9" r="17" fill="#ee4e9e"/>
+                    <text x="92" y="16" text-anchor="middle"
+                          font-size="22" font-weight="bold" fill="white">!</text>
+                </g>
+
+                <!-- suspicious website -->
+                <g transform="translate(360 190)">
+                    <rect x="0" y="0" width="125" height="70" rx="10"
+                          fill="white" stroke="#cda5ef" stroke-width="3"/>
+                    <path d="M0 22 H125" stroke="#cda5ef" stroke-width="3"/>
+                    <circle cx="13" cy="11" r="3" fill="#e34ca8"/>
+                    <circle cx="24" cy="11" r="3" fill="#b37aed"/>
+                    <text x="62" y="49" text-anchor="middle"
+                          font-size="20" font-weight="bold" fill="#9d54dc">www?</text>
+                </g>
+
+                <!-- magnifying glass -->
+                <circle cx="365" cy="305" r="43" fill="#f9e8ff"
+                        stroke="#5d348e" stroke-width="12"/>
+                <circle cx="365" cy="305" r="29" fill="#ffffff" opacity=".7"/>
+                <path d="M395 337 L432 375" stroke="#5d348e"
+                      stroke-width="17" stroke-linecap="round"/>
+                <path d="M395 337 L432 375" stroke="#d8b2fa"
+                      stroke-width="7" stroke-linecap="round"/>
+
+                <!-- sparkle details -->
+                <path d="M167 82 L172 95 L185 100 L172 105 L167 118
+                         L162 105 L149 100 L162 95 Z"
+                      fill="#d64bc5"/>
+                <path d="M437 86 L441 97 L452 101 L441 105 L437 116
+                         L433 105 L422 101 L433 97 Z"
+                      fill="#a55ae5"/>
+                <circle cx="84" cy="190" r="6" fill="#e95bbf"/>
+                <circle cx="445" cy="150" r="5" fill="#b47ae9"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ABOUT PROJECT -->
+    <section class="about-section">
+
+        <div class="about-art">
+            <svg viewBox="0 0 300 260" role="img"
+                 aria-label="Illustration of a suspicious message being inspected">
+                <circle cx="150" cy="130" r="110" fill="#f6ddfa"/>
+                <circle cx="65" cy="65" r="25" fill="#e8c4fa"/>
+                <circle cx="240" cy="200" r="30" fill="#efc7e8"/>
+
+                <rect x="35" y="50" width="190" height="140" rx="17"
+                      fill="#8f4bce"/>
+                <rect x="45" y="66" width="170" height="112" rx="10"
+                      fill="#fff5fc"/>
+
+                <circle cx="58" cy="58" r="4" fill="#ffb4df"/>
+                <circle cx="72" cy="58" r="4" fill="#d5a2f6"/>
+                <circle cx="86" cy="58" r="4" fill="#ffb4df"/>
+
+                <rect x="62" y="88" width="116" height="10" rx="5"
+                      fill="#dba5ef"/>
+                <rect x="62" y="108" width="95" height="8" rx="4"
+                      fill="#ebc9f3"/>
+                <rect x="62" y="125" width="110" height="8" rx="4"
+                      fill="#ebc9f3"/>
+
+                <path d="M90 142 L112 179 H68 Z" fill="#ed478b"/>
+                <text x="90" y="169" text-anchor="middle"
+<footer class="footer">
+    <p>© 2026 PhishLens. All rights reserved.</p>
+</footer>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PhishLens | Login</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fff1f7, #f5eaff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #3b164d;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 40px 32px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 15px 45px rgba(142, 36, 107, 0.15);
+            border: 1px solid #f0c4df;
+        }
+
+        /* PhishLens Logo */
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #8e246b;
+            margin-bottom: 12px;
+
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .logo span {
+            color: #d633a6;
+        }
+
+        @keyframes logoFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+
+        }
+
+        .tagline {
+            color: #745b78;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .login-title {
+            font-size: 25px;
+            margin-bottom: 8px;
+            color: #3b164d;
+        }
+
+        .login-subtitle {
+            color: #745b78;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .input-box label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #70205a;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e5b8d6;
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+            background: #fffafd;
+            color: #3b164d;
+        }
+
+        .input-box input:focus {
+            border-color: #d633a6;
+            box-shadow: 0 0 0 3px rgba(214, 51, 166, 0.10);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d633a6, #a855f7);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(214, 51, 166, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(214, 51, 166, 0.30);
+        }
+
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+
+        .security-note {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #977b99;
+            line-height: 1.5;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #c0268f;
+            min-height: 18px;
+        }
+
+        @media (max-width: 500px) {
+
+            .login-container {
+                padding: 32px 22px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+
+            .login-title {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo">
+            🛡️ 
+        </div>
+
+        <p class="tagline">
+            Smart Protection Against Phishing
+        </p>
+
+        <h2 class="login-title">
+            PhishLens
+        </h2>
+
+        <p class="login-subtitle">
+            Login to access your security dashboard
+        </p>
+
+
+        <form onsubmit="loginUser(event)">
+
+            <div class="input-box">
+
+                <label for="username">
+                    Username / Email
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your username or email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-box">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <button class="login-btn" type="submit">
+                🔐 Login to PhishLens
+            </button>
+
+            <div id="message" class="message"></div>
+
+        </form>
+
+
+        <p class="security-note">
+            🛡️ Your security matters. Stay alert and think before you click.
+        </p>
+
+    </div>
+
+
+    <script>
+
+        function loginUser(event) {
+
+    event.preventDefault();
+
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let message = document.getElementById("message");
+
+    if (username === "" || password === "") {
+
+        message.textContent = "Please enter your login details.";
+        return;
+
+    }
+
+    if (
+        (username === "user1" && password === "samiksha") ||
+        (username === "user2" && password === "sanika") ||
+        (username === "user3" && password === "sarvadnya")
+    ) {
+
+        message.textContent = "Login successful! Opening PhishLens...";
+
+        sessionStorage.setItem("phishlensLoggedIn", "true");
+
+        setTimeout(function() {
+
+            window.location.href = "index.html";
+
+        }, 700);
+
+    } else {
+
+        message.textContent = "Invalid username or password.";
+
+    }
+      }
+
+    </script>
+
+</body>
+
+</html>
